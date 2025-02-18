@@ -1,0 +1,11 @@
+.ipynb_checkpoints/
+*.backup
+*.ipynb
+*.numbers
+*.pdf
+*.properties
+.DS_Store
+.idea/
+.vscode/
+__pycache__/
+venv*/
