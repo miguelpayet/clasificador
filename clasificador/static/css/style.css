@@ -12,5 +12,16 @@ th,
 td {
     border: 1px solid #ddd;
     padding: 8px;
+}
+
+td {
     text-align: left;
+}
+
+th {
+    text-align: center;
+}
+
+.valor-numerico {
+    text-align: right;
 }

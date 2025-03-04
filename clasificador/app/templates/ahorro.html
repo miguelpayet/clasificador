@@ -1,3 +1,8 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Ahorros{% endblock %}
+
+{% block js_module %}
+<script type="module" src="{% static 'js/ahorro.js' %}"></script>
+{% endblock %}

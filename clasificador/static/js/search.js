@@ -1,5 +1,6 @@
+import { generarTabla, getCookie, manejarError, procesarEvento } from './crear_tabla.js';
+
 function actualizarClaseGasto(valor, id) {
-    console.log('ID:', id);
     fetch('/app/gasto/id/' + id + '/', {
         method: 'PATCH',
         headers: {
@@ -16,7 +17,6 @@ function actualizarClaseGasto(valor, id) {
             return response;
         })
         .then(response => {
-            console.log(response);
             return response.json()
         })
         .then(responseData => {
@@ -28,11 +28,6 @@ function actualizarClaseGasto(valor, id) {
             }
         })
         .catch(manejarError);
-}
-
-function colocarError(error) {
-    document.getElementById('error').innerHTML = '<p>' + error + '</p>';
-    console.log(error)
 }
 
 function crearElementoSelect(dataClases) {
@@ -50,62 +45,27 @@ function crearElementoSelect(dataClases) {
     }
 }
 
+function crearDropDownClases(elemClasesGasto, event, item, row) {
+    const cellClases = document.createElement('td');
+    const selectElement = elemClasesGasto.cloneNode(true);
+    selectElement.value = item.idclase;
+    selectElement.addEventListener('change', function (event) {
+        actualizarClaseGasto(event.target.value, item.id);
+        console.log('Nuevo valor seleccionado:', event.target.value);
+    });
+    cellClases.appendChild(selectElement);
+    row.appendChild(cellClases);
+}
+
 function generarRespuesta(registros) {
+    const columnas = ['id', 'fecha_proceso', 'descripcion', 'yapero', 'moneda', 'debe', 'haber']
+    const formatear = ['debe', 'haber']
     return obtenerClasesDeGasto()
         .then(clasesGasto => crearElementoSelect(clasesGasto))
-        .then((elemClasesGasto) => { return generarTabla(registros, elemClasesGasto) })
+        .then((elemClasesGasto) => { return generarTabla(registros, columnas, formatear, elemClasesGasto, crearDropDownClases) })
         .catch((error) => {
             return manejarError(error);
         });
-}
-
-function generarTabla(registros, elemClasesGasto) {
-    if (Array.isArray(registros) && registros.length === 0) {
-        throw Error("No hay registros.");
-    }
-    const headerRow = document.createElement("tr");
-    const headers = Object.keys(registros[0]);
-    const tabla = document.createElement("table");
-    const thead = document.createElement("thead");
-    headers.forEach(header => {
-        const th = document.createElement("th");
-        th.textContent = header.charAt(0).toUpperCase() + header.slice(1);
-        headerRow.appendChild(th);
-    });
-    thead.appendChild(headerRow);
-    tabla.appendChild(thead);
-    const tbody = document.createElement("tbody");
-    registros.forEach(item => {
-        const row = document.createElement('tr');
-        Object.values(item).forEach(value => {
-            const cell = document.createElement('td');
-            cell.textContent = value;
-            row.appendChild(cell);
-        });
-        const cellClases = document.createElement('td');
-        const selectElement = elemClasesGasto.cloneNode(true);
-        selectElement.value = item.idclase;
-        selectElement.addEventListener('change', function (event) {
-            actualizarClaseGasto(event.target.value, item.id);
-            console.log('Nuevo valor seleccionado:', event.target.value);
-        });
-        cellClases.appendChild(selectElement);
-        row.appendChild(cellClases);
-        tbody.appendChild(row);
-    });
-    tabla.appendChild(tbody);
-    return tabla
-}
-
-function getCookie(name) {
-    var value = "; " + document.cookie;
-    var parts = value.split("; " + name + "=");
-    if (parts.length == 2) return parts.pop().split(";").shift();
-}
-
-function manejarError(error) {
-    console.error('Error en la generación de tabla:', error);
-    colocarError(error || Error('Error desconocido'));
 }
 
 async function obtenerClasesDeGasto() {
@@ -137,36 +97,6 @@ async function obtenerClasesDeGasto() {
 }
 
 document.getElementById('search-form').addEventListener('submit', function (e) {
-    e.preventDefault();
     const formData = new FormData(this);
-    colocarError("")
-    fetch(this.action, {
-        method: 'POST',
-        body: formData,
-        headers: { 'X-Requested-With': 'XMLHttpRequest', }
-    })
-        .then(response => response.json())
-        .then(responseData => {
-            if (responseData.errores) {
-                throw Error('Errores: ' + responseData.errores);
-            }
-            return responseData;
-        })
-        .then(responseData => {
-            if (typeof responseData.registros === 'string') {
-                registros = JSON.parse(responseData.registros);
-            } else {
-                registros = responseData.registros;
-            }
-            if (Array.isArray(registros) && registros.length === 0) {
-                throw Error("No se obtuvo datos de consulta.");
-            }
-            return registros;
-        })
-        .then(registros => {
-            generarRespuesta(registros)
-                .then(resultado => document.getElementById('resultado').appendChild(resultado))
-                .catch(error => manejarError(error));
-        })
-        .catch(manejarError);
+    return procesarEvento(e, formData, this.action, generarRespuesta);
 });

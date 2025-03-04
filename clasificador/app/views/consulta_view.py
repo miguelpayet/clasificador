@@ -7,7 +7,6 @@ import json
 class ConsultaView(ajax_view.AjaxView):
 
     def get_consulta(self, sql, params):
-        print(sql, params)
         with connection.cursor() as cursor:
             cursor.execute(sql, params)
             return json.dumps(

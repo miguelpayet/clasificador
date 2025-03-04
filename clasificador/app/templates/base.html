@@ -35,7 +35,9 @@
         <div id="error"></div>
         <div id="resultado"></div>
     </div>
-    <script type="text/javascript" src="{% static 'js/search.js' %}"></script>
+    {% block js_module %}
+    <script type="module" src="{% static 'js/search.js' %}"></script>
+    {% endblock %}
 </body>
 
 </html>

@@ -14,7 +14,6 @@ class GastoView(View):
             gasto = Gasto.objects.get(id=id_gasto)
             data = request.body.decode('utf-8')
             data_dict = json.loads(data)
-            print(data_dict.items())
             for key, value in data_dict.items():
                 if key == 'idclase':
                     gasto.clase = Clase.objects.get(id=int(value))
