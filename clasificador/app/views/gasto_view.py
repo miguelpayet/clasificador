@@ -23,8 +23,3 @@ class GastoView(View):
             return JsonResponse({"message": "gasto updated successfully"})
         except Gasto.DoesNotExist:
             return JsonResponse({"error": "gasto not found"}, status=404)
-
-
-@csrf_exempt
-def user_view(request, user_id):
-    return UserView.as_view()(request, user_id=user_id)
