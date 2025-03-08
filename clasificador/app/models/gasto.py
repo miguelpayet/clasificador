@@ -1,12 +1,12 @@
 from django.db import models
 from app.models import Clase
+from app.models import Cuenta
 
 
 class Gasto(models.Model):
     ciudad = models.CharField(max_length=15, blank=True, null=True)
-    clase = models.ForeignKey(
-        Clase, on_delete=models.DO_NOTHING, db_column='idclase')
-    cuenta = models.CharField(max_length=20, blank=True, null=True)
+    clase = models.ForeignKey(Clase, db_column='idclase', on_delete=models.DO_NOTHING)
+    cuenta = models.ForeignKey(Cuenta, db_column='idcuenta', on_delete=models.DO_NOTHING)
     debe = models.FloatField(blank=True, null=True)
     descripcion = models.CharField(max_length=40, blank=True, null=True)
     fecha_consumo = models.DateField(blank=True, null=True)

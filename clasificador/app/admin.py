@@ -1,5 +1,6 @@
 from .models import Clase
 from .models import Cuenta
+from .models import Gasto
 from .models import Yapero
 from django.contrib import admin
 
@@ -26,3 +27,13 @@ class YaperoAdmin(admin.ModelAdmin):
     search_fields = ('numero', 'nombre')
     list_filter = ('numero', 'nombre')
     ordering = ('nombre',)
+
+
+@admin.register(Gasto)
+class GastoAdmin(admin.ModelAdmin):
+    list_display = ('cuenta', 'fecha_consumo', 'descripcion', 'moneda', 'debe', 'haber')
+    list_filter = ('clase', 'cuenta', 'moneda', 'fecha_consumo')
+    search_fields = ('descripcion', 'ciudad', 'tipo')
+    ordering = ('fecha_proceso',)
+    fields = ('clase', 'cuenta', 'descripcion', 'fecha_consumo', 'fecha_proceso',
+              'moneda', 'debe', 'haber', 'ciudad', 'pais', 'tipo')
