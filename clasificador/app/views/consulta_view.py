@@ -1,7 +1,9 @@
 from app.views import ajax_view
+from django.conf import settings
 from django.db import connection
 from django.http import JsonResponse
 import json
+import os
 
 
 class ConsultaView(ajax_view.AjaxView):
@@ -17,10 +19,15 @@ class ConsultaView(ajax_view.AjaxView):
 
     def post(self, request, *args, **kwargs):
         if self.is_ajax(request):
-            post = request.POST
-            datos = self.obtenerDatos(post.get('clase'),
-                                      post.get('mes'), post.get('año'))
+            datos = self.obtenerDatos(request.POST)
             data = {"registros": datos}
             return JsonResponse(data, status=200)
         else:
             return self.RespuestaNoPermitida()
+
+    def get_query(self, archivo):
+        static_dir = settings.STATICFILES_DIRS[0]
+        query = ""
+        with open(os.path.join(static_dir, 'sql', archivo), 'r', encoding='utf-8') as archivo:
+            query = archivo.read()
+        return query

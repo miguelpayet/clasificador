@@ -1,6 +1,7 @@
-from django import forms
-from datetime import datetime
+from app.models.cuenta import Cuenta
 from app.models.gasto import Gasto
+from datetime import datetime
+from django import forms
 
 
 class FilterForm(forms.Form):
@@ -10,7 +11,7 @@ class FilterForm(forms.Form):
 
         fecha_actual = datetime.now()
 
-        self.fields['clase'] = forms.ChoiceField(
+        self.fields['cuenta'] = forms.ChoiceField(
             choices=self.get_cuentas(),
             label="Cuenta",
             widget=forms.Select(attrs={"class": "form-control"}),
@@ -32,9 +33,8 @@ class FilterForm(forms.Form):
         return [(year, str(year)) for year in range(2020, 2030)]
 
     def get_cuentas(self):
-        queryset = Gasto.objects.values("cuenta").filter(
-            cuenta__isnull=False).distinct()
-        return [(q["cuenta"], q["cuenta"]) for q in queryset]
+        queryset = Cuenta.objects.all()
+        return [(q.id, q.nombre) for q in queryset]
 
     def get_meses(self):
         return [

@@ -70,7 +70,12 @@ export function procesarEvento(e, formData, accion, generadorRespuesta) {
         body: formData,
         headers: { 'X-Requested-With': 'XMLHttpRequest', }
     })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Error en la solicitud: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        })
         .then(responseData => {
             if (responseData.errores) {
                 throw Error('Errores: ' + responseData.errores);
@@ -88,7 +93,10 @@ export function procesarEvento(e, formData, accion, generadorRespuesta) {
         })
         .then(registros => {
             generadorRespuesta(registros)
-                .then(resultado => document.getElementById('resultado').appendChild(resultado))
+                .then(resultado => {
+                    document.getElementById('resultado').innerHTML = '';
+                    document.getElementById('resultado').appendChild(resultado)
+                })
                 .catch(error => manejarError(error));
         })
         .catch(manejarError);
