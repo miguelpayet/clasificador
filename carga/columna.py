@@ -62,7 +62,7 @@ class ColumnaNumeroEspecial(ColumnaNumero):
         tiene_valor = True
         self.valor = linea[self.posicion:self.posicion + self.longitud].strip()
         if self.valor == '':
-            self.nombre = 'debe'
+            return False  # self.nombre = 'debe'
         else:
             if self.valor[-1] == "-":
                 self.nombre = 'haber'

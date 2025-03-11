@@ -4,6 +4,7 @@ from django.db import models
 class Cuenta(models.Model):
     id = models.IntegerField(blank=True, primary_key=True)
     nombre = models.CharField(blank=True, max_length=30, null=True)
+    orden = models.IntegerField(null=True, blank=True)
 
     class Meta:
         db_table = "cuenta"

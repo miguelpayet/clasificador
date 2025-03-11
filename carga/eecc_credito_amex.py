@@ -9,5 +9,5 @@ class EECCCreditoAmex(EECCCreditoVisa):
 
     def __init__(self):
         super().__init__()
-        self.cuenta = 'Amex'
+        self.cuenta = 37
         self.nombre = 'Estado de Cuenta Tarjeta American Express'

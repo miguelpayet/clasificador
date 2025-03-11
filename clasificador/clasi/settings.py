@@ -62,7 +62,7 @@ DATABASES = {
         'NAME': 'gastos',
         'USER': 'gastos',
         'PASSWORD': 'gastos',
-        'HOST': 'uuubuntu',
+        'HOST': 'localhost',
         'PORT': '3306',
     }
 }
