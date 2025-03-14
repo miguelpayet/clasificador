@@ -33,11 +33,11 @@ class GastoAdmin(admin.ModelAdmin):
 
 
 @admin.register(Tipo)
-class ClaseAdmin(admin.ModelAdmin):
+class TipoAdmin(admin.ModelAdmin):
     list_display = ('id', 'nombre', 'orden')
     search_fields = ('nombre',)
     list_filter = ('nombre',)
-    ordering = ('nombre',)
+    ordering = ('nombre', 'orden')
 
 
 @admin.register(Yapero)
