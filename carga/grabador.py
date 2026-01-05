@@ -17,7 +17,7 @@ class Grabador():
     def grabar(self, registro):
         campos = ', '.join(campo.nombre for campo in registro.campos)
         placeholders = ', '.join(['%s'] * len(registro.campos))
-        sql = f'INSERT INTO gasto ({campos}) VALUES ({placeholders})'
+        sql = f'INSERT INTO movimiento ({campos}) VALUES ({placeholders})'
         valores = registro.get_tuple()
         with self.coneccion.cursor() as cursor:
             cursor.execute(sql, valores)

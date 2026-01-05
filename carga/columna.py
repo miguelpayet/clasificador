@@ -54,7 +54,7 @@ class ColumnaNumeroEspecial(ColumnaNumero):
     def agregar_valor(self, linea, registro):
         if self.extraer_valor(linea):
             registro.add_campo(self.get_campo())
-            otro_nombre = 'debe' if self.nombre == 'haber' else 'haber'
+            otro_nombre = 'egreso' if self.nombre == 'ingreso' else 'ingreso'
             registro.add_campo(Campo(otro_nombre, 0))
             registro.add_campo(Campo('moneda', self.moneda))
 
@@ -62,12 +62,12 @@ class ColumnaNumeroEspecial(ColumnaNumero):
         tiene_valor = True
         self.valor = linea[self.posicion:self.posicion + self.longitud].strip()
         if self.valor == '':
-            return False  # self.nombre = 'debe'
+            return False  # self.nombre = 'egreso'
         else:
             if self.valor[-1] == "-":
-                self.nombre = 'haber'
+                self.nombre = 'ingreso'
             else:
-                self.nombre = 'debe'
+                self.nombre = 'egreso'
             self.valor = self.valor.replace('-', '')
         return tiene_valor
 
