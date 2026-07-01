@@ -1,3 +1,4 @@
+*.sql
 .ipynb_checkpoints/
 *.backup
 *.ipynb
